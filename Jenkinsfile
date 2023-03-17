@@ -21,7 +21,7 @@ pipeline {
 
                 sh "docker run --name mysql --network lab9-network -e \"MYSQL_ROOT_PASSWORD=${SQL_PASSWORD}}\" -d jimtbell/dba"
                 sh "docker run --name flask-app --network lab9-network -d -e\"MYSQL_ROOT_PASSWORD=${SQL_PASSWORD}\" jimtbell/flask-app"
-                sh "docker run -d -p 80:80 --name jimtbell/nginx --network lab9-network --mount type=bind,source=\"\$(pwd)\"/nginx/nginx.conf,target=/etc/nginx/nginx.conf nginx"
+                sh "docker run -d -p 80:80 --name nginx --network lab9-network --mount type=bind,source=\"\$(pwd)\"/nginx/nginx.conf,target=/etc/nginx/nginx.conf nginx"
             }
         }
         stage('Test') {
@@ -32,9 +32,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh "echo \$DOCKERHUD_PSW | docker login -u \$DOCKERHUD_USR --password-stdin"
-                sh "docker tag jimtbell/dba jimtbell/dba:latest"
-                sh "docler tag jimtbell/flask-app jimtbell/flask-app:latest"
-                sh "docker tag jimtbell/nginx jimtbell/nginx:latest"
+                sh "docker tag dba jimtbell/dba:latest"
+                sh "docler tag flask-app jimtbell/flask-app:latest"
+                sh "docker tag nginx jimtbell/nginx:latest"
                 sh "docker push jimtbell/dba:latest"
                 sh "docker push jimtbell/flask-app:latest"
                 sh "docker push jimtbell/nginx:latest"
