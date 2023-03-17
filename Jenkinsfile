@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUD = credentials('docker_credentials')
-        SQL_PASSWORD=my-secret-pd
+        SQL_PASSWORD='my-secret-pd'
     }
     stages {
         stage('Cleanup Stage') {
